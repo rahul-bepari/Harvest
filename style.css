@@ -1,0 +1,245 @@
+/* =====================================================================
+   HARVEST — design tokens
+   Palette is drawn from the Bangladeshi farm itself rather than a generic
+   "app" palette: paddy-leaf green (primary), ripe-turmeric gold (accent,
+   also literally the colour of a real cash crop here), and wet-soil brown
+   (grounding/neutral-warm). Background stays near-white and text near-black
+   on purpose — this is the single biggest lever for sunlight readability
+   on cheap, glare-prone Android screens, more than any other design choice.
+   ===================================================================== */
+:root{
+  --green-900:#0B3D22;
+  --green-700:#0F5132;
+  --green-500:#2E7D32;
+  --gold-600:#C9860F;
+  --gold-500:#F2A93B;
+  --soil-700:#4A3221;
+  --soil-500:#7A5A3A;
+  --danger:#B3261E;
+  --danger-bg:#FBEAE9;
+  --profit-bg:#E8F5E9;
+  --bg:#FAFAF3;
+  --surface:#FFFFFF;
+  --border:#D8D2C2;
+  --text:#161512;
+  --text-mute:#5A5648;
+  --radius:16px;
+  --radius-sm:10px;
+  --tap:56px;
+  --shadow:0 2px 10px rgba(20,20,10,.08);
+  font-size: 18px;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Hind Siliguri","Noto Sans Bengali","Nirmala UI",system-ui,-apple-system,"Segoe UI",sans-serif;
+  line-height:1.5;
+  -webkit-tap-highlight-color:transparent;
+  padding-bottom:calc(78px + env(safe-area-inset-bottom));
+}
+h1,h2,h3{margin:0 0 4px;color:var(--green-900);}
+h1{font-size:1.45rem;font-weight:800;}
+h2.section-title{font-size:1.15rem;font-weight:800;margin:22px 0 10px;color:var(--green-900);}
+p{margin:0 0 8px;}
+.sub{color:var(--text-mute);font-size:.92rem;}
+.hidden{display:none !important;}
+button{font-family:inherit;}
+select,input{font-family:inherit;font-size:1rem;}
+
+/* ---------------- header ---------------- */
+.app-header{
+  position:sticky;top:0;z-index:20;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;background:var(--green-700);color:#fff;
+  box-shadow:var(--shadow);
+}
+.brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:1.2rem;}
+.brand-icon{font-size:1.5rem;}
+.header-status{display:flex;align-items:center;gap:8px;}
+.status-pill{
+  font-size:.78rem;padding:4px 10px;border-radius:999px;
+  background:rgba(255,255,255,.18);
+}
+.status-pill.online{background:var(--gold-500);color:var(--soil-700);font-weight:700;}
+.icon-btn{
+  width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,.2);
+  color:#fff;font-size:1.1rem;cursor:pointer;
+}
+
+/* ---------------- layout / views ---------------- */
+main{max-width:640px;margin:0 auto;padding:16px;}
+.view{display:none;}
+.view.active{display:block;animation:fadeIn .18s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+.view-head{margin-bottom:6px;}
+
+/* ---------------- bottom nav ---------------- */
+.bottom-nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:30;
+  display:flex;background:var(--surface);
+  border-top:2px solid var(--border);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.nav-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:10px 0 8px;border:none;background:transparent;color:var(--text-mute);
+  font-size:.82rem;font-weight:700;cursor:pointer;min-height:var(--tap);
+}
+.nav-btn .nav-icon{font-size:1.5rem;}
+.nav-btn.active{color:var(--green-700);}
+.nav-btn.active .nav-icon{transform:scale(1.12);}
+
+/* ---------------- buttons ---------------- */
+.big-btn{
+  width:100%;min-height:var(--tap);border-radius:var(--radius-sm);
+  font-size:1.05rem;font-weight:800;border:none;cursor:pointer;margin:10px 0;
+}
+.btn-primary{background:var(--green-700);color:#fff;}
+.btn-primary:active{background:var(--green-900);}
+.btn-secondary{background:var(--gold-500);color:var(--soil-700);}
+.btn-secondary:active{background:var(--gold-600);}
+.btn-danger{background:var(--danger-bg);color:var(--danger);border:2px solid var(--danger);}
+.btn-ghost{background:none;border:2px solid var(--border);color:var(--text);}
+
+/* ---------------- season wheel ---------------- */
+.wheel-wrap{display:flex;justify-content:center;margin:8px 0 4px;}
+.wheel-wrap svg{width:100%;max-width:420px;height:auto;}
+.legend-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:4px;}
+.legend-chip{
+  display:flex;align-items:center;gap:5px;font-size:.78rem;color:var(--text-mute);
+  background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:3px 9px;
+}
+.legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
+
+/* ---------------- crop grid / cards ---------------- */
+.crop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;}
+.crop-card{
+  background:var(--surface);border:2px solid var(--border);border-radius:var(--radius-sm);
+  padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;
+  text-align:center;cursor:pointer;
+}
+.crop-card.plantable{border-color:var(--green-500);box-shadow:0 0 0 3px rgba(46,125,50,.15);}
+.crop-card svg{width:44px;height:44px;}
+.crop-card .cname{font-size:.85rem;font-weight:700;}
+.crop-card .cwhen{font-size:.72rem;color:var(--text-mute);}
+
+/* ---------------- plots & cycles ---------------- */
+.plots-list{display:flex;flex-direction:column;gap:12px;margin-top:8px;}
+.plot-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px;box-shadow:var(--shadow);
+}
+.plot-card h3{font-size:1.1rem;}
+.plot-meta{font-size:.85rem;color:var(--text-mute);margin-bottom:8px;}
+.cycle-item{
+  display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px dashed var(--border);
+}
+.cycle-item:first-of-type{border-top:none;}
+.cycle-icon{width:42px;height:42px;flex:none;}
+.cycle-info{flex:1;min-width:0;}
+.cycle-info .cname{font-weight:700;}
+.cycle-badge{
+  font-size:.75rem;font-weight:800;padding:3px 8px;border-radius:999px;white-space:nowrap;
+}
+.cycle-badge.countdown{background:#FFF3CD;color:#8A6416;}
+.cycle-badge.overdue{background:var(--danger-bg);color:var(--danger);}
+.cycle-badge.done{background:var(--profit-bg);color:var(--green-700);}
+.cycle-profit{font-weight:800;}
+.cycle-profit.pos{color:var(--green-700);}
+.cycle-profit.neg{color:var(--danger);}
+.add-cycle-btn{
+  width:100%;margin-top:6px;padding:10px;border-radius:var(--radius-sm);border:2px dashed var(--border);
+  background:none;color:var(--green-700);font-weight:700;min-height:48px;
+}
+.weather-flag{
+  margin-top:6px;background:var(--danger-bg);color:var(--danger);font-size:.8rem;
+  padding:6px 10px;border-radius:8px;font-weight:700;
+}
+
+/* ---------------- profit ranking ---------------- */
+.profit-ranking{display:flex;flex-direction:column;gap:8px;}
+.rank-row{
+  display:flex;align-items:center;gap:10px;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;
+}
+.rank-row svg{width:32px;height:32px;flex:none;}
+.rank-row .rname{flex:1;font-weight:700;}
+.rank-row .ramt{font-weight:800;}
+
+/* ---------------- market / price ---------------- */
+.field-row{display:flex;flex-direction:column;gap:4px;margin:8px 0;}
+.field-row label{font-size:.85rem;font-weight:700;color:var(--soil-700);}
+.field-row select,.field-row input{
+  min-height:48px;border:2px solid var(--border);border-radius:10px;padding:0 12px;background:var(--surface);color:var(--text);
+}
+.trend-canvas{
+  width:100%;height:auto;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-sm);display:block;
+}
+.empty-note{color:var(--text-mute);font-size:.9rem;text-align:center;padding:20px 0;}
+.market-compare{display:flex;flex-direction:column;gap:8px;}
+.market-row{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;
+}
+.market-row.best{border-color:var(--green-500);background:var(--profit-bg);}
+.market-row .mname{font-weight:700;}
+.market-row .mnet{font-weight:800;color:var(--green-700);}
+.alerts-list{display:flex;flex-direction:column;gap:8px;}
+.alert-row{
+  display:flex;justify-content:space-between;align-items:center;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;
+}
+.alert-row.hit{border-color:var(--gold-500);background:#FFF6E5;}
+
+/* ---------------- settings ---------------- */
+.settings-block{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px;margin-bottom:14px;
+}
+.weather-warnings{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+
+/* ---------------- bottom sheet / modal ---------------- */
+.sheet-overlay{
+  position:fixed;inset:0;background:rgba(10,10,5,.45);z-index:50;
+  display:flex;align-items:flex-end;
+}
+.sheet-content{
+  background:var(--surface);width:100%;max-height:88vh;overflow-y:auto;
+  border-radius:20px 20px 0 0;padding:18px 16px calc(20px + env(safe-area-inset-bottom));
+  animation:slideUp .2s ease;
+}
+@keyframes slideUp{from{transform:translateY(24px);opacity:.4;}to{transform:none;opacity:1;}}
+.sheet-content h2{margin-bottom:12px;}
+.sheet-close{
+  position:sticky;top:0;float:right;background:var(--border);border:none;
+  width:36px;height:36px;border-radius:50%;font-size:1.1rem;cursor:pointer;
+}
+
+/* ---------------- toast ---------------- */
+.toast{
+  position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:60;
+  background:var(--soil-700);color:#fff;padding:10px 18px;border-radius:999px;
+  font-size:.9rem;font-weight:700;box-shadow:var(--shadow);
+}
+
+/* ---------------- misc ---------------- */
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.chip-select{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0;}
+.chip-select button{
+  padding:8px 14px;border-radius:999px;border:2px solid var(--border);background:var(--surface);
+  font-weight:700;min-height:44px;cursor:pointer;
+}
+.chip-select button.sel{background:var(--green-700);border-color:var(--green-700);color:#fff;}
+
+@media (min-width:600px){
+  main{padding:20px;}
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms !important;}
+}

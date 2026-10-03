@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>হার্ভেস্ট | Harvest — চাষের পরিকল্পনা ও বাজারদর</title>
+
+<!-- PWA meta -->
+<meta name="theme-color" content="#0F5132">
+<meta name="description" content="ছোট কৃষকদের জন্য চাষ পরিকল্পনা ও বাজারদর ট্র্যাকার — অফলাইনেও কাজ করে">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230F5132'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle'%3E🌾%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230F5132'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle'%3E🌾%3C/text%3E%3C/svg%3E">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ======================= APP HEADER ======================= -->
+<header class="app-header">
+  <div class="brand">
+    <span class="brand-icon" aria-hidden="true">🌾</span>
+    <span class="brand-name">হার্ভেস্ট</span>
+  </div>
+  <div class="header-status">
+    <span id="onlineBadge" class="status-pill" title="সংযোগ অবস্থা">অফলাইন</span>
+    <button id="installBtn" class="icon-btn hidden" title="অ্যাপ ইনস্টল করুন" aria-label="ইনস্টল করুন">⬇️</button>
+  </div>
+</header>
+
+<!-- ======================= MAIN VIEWS ======================= -->
+<main id="mainViews">
+
+  <!-- ---------- VIEW: crop-calendar (season wheel, home) ---------- -->
+  <section id="view-calendar" class="view active" aria-label="মৌসুম চাকা">
+    <div class="view-head">
+      <h1>মৌসুম চাকা</h1>
+      <p class="sub">আজকের তারিখ অনুযায়ী কোন ফসল এখন লাগানো যাবে</p>
+    </div>
+
+    <div id="wheelWrap" class="wheel-wrap">
+      <!-- season wheel SVG injected by script.js (crop-calendar section) -->
+    </div>
+
+    <div class="legend-row" id="categoryLegend"></div>
+
+    <h2 class="section-title">✅ এখন লাগানোর উপযুক্ত ফসল</h2>
+    <div id="plantableNowGrid" class="crop-grid"></div>
+
+    <h2 class="section-title">🕓 শীঘ্রই লাগানো যাবে</h2>
+    <div id="plantableSoonGrid" class="crop-grid"></div>
+  </section>
+
+  <!-- ---------- VIEW: plot-tracker + expense-yield ---------- -->
+  <section id="view-plots" class="view" aria-label="আমার জমি">
+    <div class="view-head">
+      <h1>আমার জমি</h1>
+      <p class="sub">জমি, চাষ শুরু ও ফসল কাটার হিসাব রাখুন</p>
+    </div>
+
+    <button id="addPlotBtn" class="btn-primary big-btn">➕ নতুন জমি যোগ করুন</button>
+
+    <div id="plotsList" class="plots-list"></div>
+
+    <h2 class="section-title">📊 কোন ফসলে সবচেয়ে বেশি লাভ হয়েছে?</h2>
+    <p class="sub">গত মৌসুমের প্রকৃত হিসাব অনুযায়ী — অনুমান নয়</p>
+    <div id="profitRanking" class="profit-ranking"></div>
+  </section>
+
+  <!-- ---------- VIEW: price-tracking ---------- -->
+  <section id="view-prices" class="view" aria-label="বাজার দর">
+    <div class="view-head">
+      <h1>বাজার দর</h1>
+      <p class="sub">দাম লিখে রাখুন, প্রবণতা দেখুন, সেরা বাজার বেছে নিন</p>
+    </div>
+
+    <button id="addPriceBtn" class="btn-primary big-btn">➕ দাম যোগ করুন</button>
+
+    <div class="field-row">
+      <label for="priceCropSelect">ফসল বাছাই করুন</label>
+      <select id="priceCropSelect"></select>
+    </div>
+
+    <h2 class="section-title">📈 দামের প্রবণতা</h2>
+    <canvas id="trendCanvas" width="600" height="260" class="trend-canvas"></canvas>
+    <p id="trendEmpty" class="empty-note hidden">এই ফসলের জন্য এখনও কোনো দাম লেখা হয়নি।</p>
+
+    <h2 class="section-title">🏪 কোন বাজারে বিক্রি করলে বেশি লাভ?</h2>
+    <div id="marketCompare" class="market-compare"></div>
+
+    <h2 class="section-title">🔔 দামের সতর্কতা</h2>
+    <button id="addAlertBtn" class="btn-secondary big-btn">➕ টার্গেট দাম বসান</button>
+    <div id="alertsList" class="alerts-list"></div>
+  </section>
+
+  <!-- ---------- VIEW: settings / sync / weather ---------- -->
+  <section id="view-settings" class="view" aria-label="সেটিংস">
+    <div class="view-head">
+      <h1>সেটিংস</h1>
+    </div>
+
+    <div class="settings-block">
+      <h2 class="section-title">🌦️ আবহাওয়া সতর্কতা</h2>
+      <p class="sub">ফসল কাটার সময় ভারী বৃষ্টি বা তাপ থাকলে আগেই জানিয়ে দেবে (ইন্টারনেট দরকার)</p>
+      <div class="field-row">
+        <label for="districtSelect">আপনার এলাকা</label>
+        <select id="districtSelect"></select>
+      </div>
+      <div id="weatherWarnings" class="weather-warnings"></div>
+    </div>
+
+    <div class="settings-block">
+      <h2 class="section-title">🔔 নোটিফিকেশন</h2>
+      <button id="enableNotifBtn" class="btn-secondary big-btn">নোটিফিকেশন চালু করুন</button>
+      <p id="notifStatus" class="sub"></p>
+    </div>
+
+    <div class="settings-block">
+      <h2 class="section-title">🌐 কমিউনিটি বাজার দর (ঐচ্ছিক)</h2>
+      <p class="sub">অন্য কৃষকদের দেওয়া দাম দেখতে ও নিজেরটা শেয়ার করতে চাইলে একটি Supabase ঠিকানা যুক্ত করুন। না দিলেও অ্যাপ পুরোপুরি কাজ করবে।</p>
+      <div class="field-row">
+        <label for="supabaseUrl">Supabase URL</label>
+        <input id="supabaseUrl" type="text" placeholder="https://xxxx.supabase.co">
+      </div>
+      <div class="field-row">
+        <label for="supabaseKey">Supabase Anon Key</label>
+        <input id="supabaseKey" type="text" placeholder="anon key">
+      </div>
+      <button id="saveSupabaseBtn" class="btn-secondary big-btn">সংরক্ষণ করুন</button>
+      <p id="supabaseStatus" class="sub"></p>
+    </div>
+
+    <div class="settings-block">
+      <h2 class="section-title">💾 ডেটা</h2>
+      <button id="exportBtn" class="btn-secondary big-btn">সব ডেটা এক্সপোর্ট করুন (JSON)</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ======================= BOTTOM NAV ======================= -->
+<nav class="bottom-nav" aria-label="প্রধান মেনু">
+  <button class="nav-btn active" data-view="view-calendar">
+    <span class="nav-icon" aria-hidden="true">🎡</span><span>মৌসুম</span>
+  </button>
+  <button class="nav-btn" data-view="view-plots">
+    <span class="nav-icon" aria-hidden="true">🌱</span><span>জমি</span>
+  </button>
+  <button class="nav-btn" data-view="view-prices">
+    <span class="nav-icon" aria-hidden="true">💰</span><span>বাজার</span>
+  </button>
+  <button class="nav-btn" data-view="view-settings">
+    <span class="nav-icon" aria-hidden="true">⚙️</span><span>সেটিংস</span>
+  </button>
+</nav>
+
+<!-- ======================= MODAL / SHEET ROOT ======================= -->
+<div id="sheetOverlay" class="sheet-overlay hidden">
+  <div id="sheetContent" class="sheet-content" role="dialog" aria-modal="true"></div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
